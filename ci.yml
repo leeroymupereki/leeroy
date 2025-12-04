@@ -1,0 +1,26 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:7-alpine
+      minio:
+        image: minio/minio:latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install server deps
+        working-directory: server
+        run: npm ci
+      - name: Install client deps
+        working-directory: client
+        run: npm ci
+      - name: Run basic checks
+        run: echo "Add tests and lint steps as needed"
